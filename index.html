@@ -32,6 +32,7 @@
             display:flex;
             flex-direction:column;
             font-size:16px;
+            -webkit-font-size-adjust:100%;
         }
 
         /* HERO: ambiente más psicológico, colores suaves
@@ -93,6 +94,10 @@
             color:rgba(21,50,67,0.8);
             transition:color .18s, transform .12s, background .18s;
             position:relative;font-size:15px;
+            -webkit-tap-highlight-color: rgba(0,0,0,0);
+            touch-action: manipulation;
+            min-height:40px; /* mejor objetivo táctil */
+            min-width:64px;
         }
         .menu button:hover{ transform:translateY(-2px); color:var(--accent-600) }
 
@@ -101,6 +106,7 @@
             position:absolute;bottom:-8px;height:3px;border-radius:999px;background:var(--accent);
             transition:left .26s cubic-bezier(.2,.9,.2,1), width .26s cubic-bezier(.2,.9,.2,1);
             filter:blur(.4px);opacity:0.98;
+            left:0; width:0;
         }
         .menu button.active{
             color:var(--accent-600);
@@ -123,7 +129,7 @@
         h2{margin-top:0;color:var(--accent-600);font-size:18px}
 
         /* Galería: tarjetas limpias */
-        .gallery{display:flex;flex-wrap:wrap;gap:12px;margin-top:12px}
+        .gallery{display:flex;flex-wrap:wrap;gap:12px;margin-top:12px;justify-content:flex-start}
         .file-card{
             width:160px;background:linear-gradient(180deg,#fff,#fff);border-radius:12px;padding:10px;border:1px solid rgba(21,50,67,0.04);
             display:flex;flex-direction:column;align-items:center;gap:8px;box-shadow:0 6px 14px rgba(21,50,67,0.04);
@@ -136,6 +142,8 @@
             padding:8px 12px;border-radius:10px;border:1px solid rgba(47,111,154,0.08);
             background:linear-gradient(180deg,#fff,#fbfdff);cursor:pointer;font-size:14px;color:var(--accent-600);
             transition:transform .12s, box-shadow .12s;
+            min-height:40px; /* mejor objetivo táctil */
+            display:inline-flex;align-items:center;justify-content:center;
         }
         .btn:hover{transform:translateY(-3px);box-shadow:0 8px 18px rgba(47,111,154,0.06)}
 
@@ -148,13 +156,65 @@
         button:focus, a:focus { outline:3px solid rgba(90,155,213,0.18); outline-offset:2px; border-radius:8px; }
 
         /* Responsive: disposición vertical en pantallas pequeñas */
-        @media (max-width:700px){
-            .overlay{flex-direction:column;align-items:flex-start}
-            .menu{flex-wrap:wrap}
-            .file-card{width:48%}
-            .avatars{gap:10px}
-            .hero{padding:28px 12px}
+        @media (max-width:1000px){
+            .overlay{padding:18px;max-width:940px}
             .names{font-size:18px}
+            .avatar{width:80px;height:80px}
+            .file-card{width:140px}
+            .file-card img{height:100px}
+        }
+
+        /* Tablets: facilitar scroll horizontal del menú y adaptar tarjetas */
+        @media (max-width:820px){
+            .container{padding:12px}
+            nav{gap:6px}
+            .menu{
+                overflow-x:auto;
+                -webkit-overflow-scrolling:touch;
+                padding-bottom:12px;
+                scrollbar-width:none;
+            }
+            .menu::-webkit-scrollbar{display:none}
+            .menu button{flex:0 0 auto; margin-right:6px}
+            .overlay{gap:12px}
+            .file-card{width:calc(33.333% - 12px)}
+        }
+
+        /* Móviles: diseño vertical, tarjetas más anchas, mayor espacio táctil */
+        @media (max-width:520px){
+            body{font-size:15px}
+            .hero{padding:28px 12px}
+            .overlay{flex-direction:column;align-items:flex-start;padding:14px;border-radius:12px}
+            .avatars{gap:10px}
+            .avatar{width:72px;height:72px}
+            .names{font-size:18px}
+            .subtitle{font-size:13px}
+            .menu{gap:6px}
+            .menu button{padding:10px 14px;font-size:15px;min-width:72px;min-height:44px}
+            .menu .indicator{bottom:-6px;height:4px}
+            section{padding:14px;border-radius:10px}
+            .gallery{gap:10px}
+            /* tarjetas de galería: dos por fila para móviles */
+            .file-card{flex:1 0 calc(50% - 10px); max-width:calc(50% - 10px); width:auto}
+            .file-card img{height:96px}
+            .file-name{font-size:13px}
+            .btn{padding:10px 12px;font-size:14px;min-height:44px}
+        }
+
+        /* Ajustes para pantallas muy pequeñas */
+        @media (max-width:360px){
+            .file-card img{height:84px}
+            .names{font-size:16px}
+            .subtitle{font-size:12px}
+            .avatar{width:64px;height:64px}
+            .file-card{flex:1 0 100%; max-width:100%}
+        }
+
+        /* Mejor contraste para impresión / zoom */
+        @media (prefers-contrast: more){
+            body{background: #fff}
+            .overlay{border-color:rgba(20,40,80,0.08)}
+            .file-card{border-color:rgba(20,40,80,0.06)}
         }
     </style>
 </head>
@@ -171,7 +231,7 @@
             </div>
             <div>
                 <div class="names">Silvia Bonilla &amp; Hever Granados</div>
-                <div class="subtitle">Portafolio colaborativo — Navegue el menú y vea el portafolio</div>
+                <div class="subtitle">Portafolio colaborativo</div>
             </div>
         </div>
     </header>
@@ -185,14 +245,18 @@
                 <button class="tab" data-target="contacto" role="tab">Contacto</button>
                 <div class="indicator" aria-hidden="true"></div>
             </div>
-            <div>
-                <small style="color:#666">Interacción: clic en las pestañas</small>
-            </div>
+            
         </nav>
 
         <section id="inicio" class="active" role="tabpanel">
-            <h2>Bienvenida</h2>
-            <p>Este es el inicio del portafolio colaborativo. Use el menú para navegar entre secciones y la sección "Portafolio" para ver trabajos predefinidos.</p>
+            <h2>Bienvenid@s</h2>
+            <h1>🌟 Un Viaje al Centro de la Mente: Nuestro Portafolio de Psicología 🧠</h1>
+            <p>Nos emociona muchísimo que estés aquí. Este portafolio es más que una simple colección de trabajos; es la convergencia de dos miradas y el reflejo de nuestra pasión compartida por la Licenciatura en Psicología.</p>
+            <p>Somos Silvia Bonilla y Hever Granados, y hemos creado este rincón digital con el objetivo de presentar una muestra de nuestros mejores trabajos académicos, aquellos que evidencian nuestras habilidades, el rigor de nuestro aprendizaje y nuestra evolución profesional.</p>
+            <p>🔍 Intuitivo y Amigable: Queremos que te sientas cómodo/a explorando. Aquí, nuestros proyectos están organizados para ser fáciles de revisar y visualmente atractivos, facilitando la comprensión de cada logro. </p>
+            <p>Te invitamos a explorar los proyectos y tareas que marcan los hitos de nuestra formación. Si quieres conocer el nivel de nuestro trabajo en la carrera de Psicología, estás en el lugar correcto.</p>
+            <p>¡Gracias por acompañarnos en este proceso de presentación y crecimiento!</p>
+            <h1>Silvia Bonilla y Hever Granados Estudiantes de la Licenciatura en Psicología</h1>
         </section>
 
         <section id="portafolio" role="tabpanel">
@@ -207,12 +271,12 @@
 
         <section id="sobre" role="tabpanel">
             <h2>Sobre nosotros</h2>
-            <p>María López — Estudiante en diseño gráfico. Juan Pérez — Estudiante en desarrollo web. Este portafolio demuestra una interfaz para mostrar trabajos definidos desde el código.</p>
+            <p>Silvia Bonilla — Estudiante De Psicologia. Hever Granados — Estudiante De Psicologia. </p>
         </section>
 
         <section id="contacto" role="tabpanel">
             <h2>Contacto</h2>
-            <p>Email: <a href="BR23031@ues.edu.sv">BR23031@ues.edu.sv</a> — <a href="mailto:juan@example.com">juan@example.com</a></p>
+            <p>Email: <a href="BR23031@ues.edu.sv">BR23031@ues.edu.sv</a> — <a href="GM24056@ues.edu.sv">GM24056@ues.edu.sv</a></p>
         </section>
     </main>
 
