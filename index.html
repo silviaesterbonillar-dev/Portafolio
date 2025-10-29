@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Portafolio - Silvia y Hever </title>
+    <style>
+        /* Tema: minimalista y amigable, orientado a Psicología */
+        :root{
+            --accent:#5a9bd5;        /* azul suave (calma) */
+            --accent-600:#2f6f9a;   /* azul más oscuro */
+            --muted:#ffffff;
+            --bg:#f6fbff;           /* fondo muy suave */
+            --surface:#ffffff;
+            --text:#153243;         /* texto oscuro pero cálido */
+            --glass: rgba(255,255,255,0.88);
+            --soft:#f3f8ff;
+            --radius:14px;
+            --shadow: 0 6px 18px rgba(20,30,40,0.06);
+        }
+
+        *{box-sizing:border-box}
+        html,body{height:100%}
+        body{
+            margin:0;
+            font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;
+            color:var(--text);
+            background:linear-gradient(180deg,var(--bg) 0%, #ffffff 60%);
+            -webkit-font-smoothing:antialiased;
+            -moz-osx-font-smoothing:grayscale;
+            min-height:100vh;
+            display:flex;
+            flex-direction:column;
+            font-size:16px;
+        }
+
+        /* HERO: ambiente más psicológico, colores suaves
+           Reemplazar 'background-psicologia.jpg' por su imagen temática */
+        .hero{
+            background-image: url('background-psicologia.jpg'); /* imagen sugerida: texturas suaves, tonos azules/pastel */
+            background-size:cover;
+            background-position:center;
+            padding:48px 20px;
+            color:var(--muted);
+            position:relative;
+            overflow:hidden;
+            display:flex;
+            align-items:center;
+        }
+        .hero::before{
+            content:"";
+            position:absolute;inset:0;
+            background:linear-gradient(180deg, rgba(90,155,213,0.12), rgba(255,255,255,0.02));
+            pointer-events:none;
+        }
+
+        .overlay{
+            background: linear-gradient(180deg, rgba(255,255,255,0.82), rgba(255,255,255,0.85));
+            padding:20px;
+            border-radius:var(--radius);
+            max-width:1100px;
+            margin:auto;
+            display:flex;
+            align-items:center;
+            gap:18px;
+            backdrop-filter: blur(6px);
+            border:1px solid rgba(20,40,80,0.04);
+            box-shadow: var(--shadow);
+            transition:transform .28s ease;
+        }
+        .overlay:hover{ transform: translateY(-4px) }
+
+        /* Avatares: más cálidos y humanos */
+        .avatars{display:flex;gap:12px;align-items:center}
+        .avatar{
+            width:96px;height:96px;border-radius:999px;overflow:hidden;background:linear-gradient(180deg,#fff,#fbfdff);
+            display:flex;align-items:center;justify-content:center;border:1px solid rgba(47,111,154,0.08);
+            box-shadow:0 8px 16px rgba(47,111,154,0.06);
+            flex-shrink:0;
+        }
+        .avatar img{width:100%;height:100%;object-fit:cover;display:block}
+        .names{font-weight:700;font-size:20px;letter-spacing:0.1px;color:var(--accent-600)}
+        .subtitle{font-size:13px;opacity:0.9;color:rgba(21,50,67,0.85)}
+
+        /* LAYOUT */
+        .container{max-width:1100px;margin:20px auto;padding:16px;flex:1;width:100%}
+        nav{display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+        .menu{display:flex;gap:8px;position:relative;align-items:center}
+        .menu button{
+            background:transparent;
+            border:0;
+            padding:8px 12px;border-radius:10px;cursor:pointer;font-weight:700;
+            color:rgba(21,50,67,0.8);
+            transition:color .18s, transform .12s, background .18s;
+            position:relative;font-size:15px;
+        }
+        .menu button:hover{ transform:translateY(-2px); color:var(--accent-600) }
+
+        /* indicador muy sutil */
+        .menu .indicator{
+            position:absolute;bottom:-8px;height:3px;border-radius:999px;background:var(--accent);
+            transition:left .26s cubic-bezier(.2,.9,.2,1), width .26s cubic-bezier(.2,.9,.2,1);
+            filter:blur(.4px);opacity:0.98;
+        }
+        .menu button.active{
+            color:var(--accent-600);
+            background:linear-gradient(180deg, rgba(90,155,213,0.08), rgba(47,111,154,0.03));
+            padding:8px 14px;border-radius:12px;
+            box-shadow:none;
+        }
+
+        /* SECCIONES: minimalistas y accesibles */
+        section{
+            display:none;
+            padding:18px;
+            margin-top:12px;
+            background:var(--surface);
+            border-radius:12px;
+            box-shadow:0 8px 30px rgba(20,30,40,0.04);
+            border:1px solid rgba(20,40,80,0.03);
+        }
+        section.active{display:block}
+        h2{margin-top:0;color:var(--accent-600);font-size:18px}
+
+        /* Galería: tarjetas limpias */
+        .gallery{display:flex;flex-wrap:wrap;gap:12px;margin-top:12px}
+        .file-card{
+            width:160px;background:linear-gradient(180deg,#fff,#fff);border-radius:12px;padding:10px;border:1px solid rgba(21,50,67,0.04);
+            display:flex;flex-direction:column;align-items:center;gap:8px;box-shadow:0 6px 14px rgba(21,50,67,0.04);
+            transform:translateY(0);opacity:1;
+        }
+        .file-card img{width:100%;height:110px;object-fit:cover;border-radius:10px;background:var(--soft)}
+        .file-name{font-size:13px;text-align:center;word-break:break-all;color:var(--text)}
+        .file-actions{display:flex;gap:6px}
+        .btn{
+            padding:8px 12px;border-radius:10px;border:1px solid rgba(47,111,154,0.08);
+            background:linear-gradient(180deg,#fff,#fbfdff);cursor:pointer;font-size:14px;color:var(--accent-600);
+            transition:transform .12s, box-shadow .12s;
+        }
+        .btn:hover{transform:translateY(-3px);box-shadow:0 8px 18px rgba(47,111,154,0.06)}
+
+        .file-type{
+            font-size:12px;color:rgba(21,50,67,0.6);padding:8px;border-radius:999px;background:#f6fbff;border:1px solid rgba(47,111,154,0.03);
+            width:100%;text-align:center;
+        }
+
+        /* Accesibilidad: foco visible */
+        button:focus, a:focus { outline:3px solid rgba(90,155,213,0.18); outline-offset:2px; border-radius:8px; }
+
+        /* Responsive: disposición vertical en pantallas pequeñas */
+        @media (max-width:700px){
+            .overlay{flex-direction:column;align-items:flex-start}
+            .menu{flex-wrap:wrap}
+            .file-card{width:48%}
+            .avatars{gap:10px}
+            .hero{padding:28px 12px}
+            .names{font-size:18px}
+        }
+    </style>
+</head>
+<body>
+    <header class="hero" role="banner">
+        <div class="overlay">
+            <div class="avatars" aria-hidden="false">
+                <figure class="avatar" title="María López">
+                    <img src="avatar-mujer.jpg" alt="Avatar Silvia (reemplazar)">
+                </figure>
+                <figure class="avatar" title="Juan Pérez">
+                    <img src="avatar-hombre.jpg" alt="Avatar Hever (reemplazar)">
+                </figure>
+            </div>
+            <div>
+                <div class="names">Silvia Bonilla &amp; Hever Granados</div>
+                <div class="subtitle">Portafolio colaborativo — Navegue el menú y vea el portafolio</div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container" role="main">
+        <nav aria-label="Navegación principal">
+            <div class="menu" role="tablist">
+                <button class="tab active" data-target="inicio" role="tab">Inicio</button>
+                <button class="tab" data-target="portafolio" role="tab">Portafolio</button>
+                <button class="tab" data-target="sobre" role="tab">Sobre nosotros</button>
+                <button class="tab" data-target="contacto" role="tab">Contacto</button>
+                <div class="indicator" aria-hidden="true"></div>
+            </div>
+            <div>
+                <small style="color:#666">Interacción: clic en las pestañas</small>
+            </div>
+        </nav>
+
+        <section id="inicio" class="active" role="tabpanel">
+            <h2>Bienvenida</h2>
+            <p>Este es el inicio del portafolio colaborativo. Use el menú para navegar entre secciones y la sección "Portafolio" para ver trabajos predefinidos.</p>
+        </section>
+
+        <section id="portafolio" role="tabpanel">
+            <h2>Portafolio</h2>
+            <!-- Solo aparece el botón en la UI; los items se definen en el código -->
+            <div style="text-align:center">
+                <button id="showBtn" class="btn" aria-controls="gallery">Mostrar portafolio</button>
+            </div>
+
+            <div class="gallery" id="gallery" aria-live="polite" hidden></div>
+        </section>
+
+        <section id="sobre" role="tabpanel">
+            <h2>Sobre nosotros</h2>
+            <p>María López — Estudiante en diseño gráfico. Juan Pérez — Estudiante en desarrollo web. Este portafolio demuestra una interfaz para mostrar trabajos definidos desde el código.</p>
+        </section>
+
+        <section id="contacto" role="tabpanel">
+            <h2>Contacto</h2>
+            <p>Email: <a href="BR23031@ues.edu.sv">BR23031@ues.edu.sv</a> — <a href="mailto:juan@example.com">juan@example.com</a></p>
+        </section>
+    </main>
+
+    <script>
+        // Navegación de pestañas con indicador animado
+        const tabs = Array.from(document.querySelectorAll('.tab'));
+        const indicator = document.querySelector('.menu .indicator');
+
+        function updateIndicator(){
+            const active = document.querySelector('.tab.active');
+            if(!active) { indicator.style.width='0'; return; }
+            const rect = active.getBoundingClientRect();
+            const parentRect = active.parentElement.getBoundingClientRect();
+            indicator.style.left = (rect.left - parentRect.left) + 'px';
+            indicator.style.width = rect.width + 'px';
+        }
+
+        window.addEventListener('resize', updateIndicator);
+        tabs.forEach(btn=>{
+            btn.addEventListener('click', ()=>{
+                tabs.forEach(b=>b.classList.remove('active'));
+                btn.classList.add('active');
+                const target = btn.dataset.target;
+                document.querySelectorAll('section').forEach(s=>s.classList.toggle('active', s.id===target));
+                updateIndicator();
+            });
+        });
+        setTimeout(updateIndicator, 80);
+
+        // Datos del portafolio definidos desde el propio código (no hay carga de archivos en tiempo de ejecución)
+        const portfolioItems = [
+            // Reemplace las rutas por sus propios archivos dentro del proyecto
+            { name: 'Proyecto-1.jpg', type: 'image/jpeg', src: 'portfolio/proyecto1.jpg', isImage: true },
+            { name: 'Proyecto-2.jpg', type: 'image/jpeg', src: 'portfolio/proyecto2.jpg', isImage: true },
+            { name: 'Resumen.pdf', type: 'application/pdf', src: 'portfolio/resumen.pdf', isImage: false },
+            { name: 'Presentación.pptx', type: 'application/vnd.openxmlformats-officedocument.presentationml.presentation', src: 'portfolio/presentacion.pptx', isImage: false }
+        ];
+
+        const gallery = document.getElementById('gallery');
+        const showBtn = document.getElementById('showBtn');
+
+        function renderGallery(){
+            gallery.innerHTML = '';
+            portfolioItems.slice().reverse().forEach(file=>{
+                const card = document.createElement('div');
+                card.className = 'file-card';
+
+                const name = document.createElement('div');
+                name.className = 'file-name';
+                name.textContent = file.name;
+
+                if(file.isImage){
+                    const img = document.createElement('img');
+                    img.src = file.src;
+                    img.alt = file.name;
+                    card.appendChild(img);
+                    card.appendChild(name);
+
+                    const actions = document.createElement('div');
+                    actions.className = 'file-actions';
+                    const viewBtn = document.createElement('button');
+                    viewBtn.className = 'btn';
+                    viewBtn.textContent = 'Abrir';
+                    viewBtn.onclick = ()=> window.open(file.src, '_blank');
+                    actions.appendChild(viewBtn);
+                    card.appendChild(actions);
+                } else {
+                    const icon = document.createElement('div');
+                    icon.style.width='100%';
+                    icon.style.height='96px';
+                    icon.style.display='flex';
+                    icon.style.alignItems='center';
+                    icon.style.justifyContent='center';
+                    icon.style.background='#fff5f5';
+                    icon.className = 'file-type';
+                    icon.textContent = file.type.split('/').pop().toUpperCase();
+                    card.appendChild(icon);
+                    card.appendChild(name);
+
+                    const actions = document.createElement('div');
+                    actions.className = 'file-actions';
+                    const link = document.createElement('a');
+                    link.className='btn';
+                    link.textContent='Ver/Descargar';
+                    link.href = file.src;
+                    link.target = '_blank';
+                    actions.appendChild(link);
+                    card.appendChild(actions);
+                }
+
+                gallery.appendChild(card);
+            });
+        }
+
+        // Mostrar/ocultar galería al pulsar el botón (en UI solo hay el botón como pidió)
+        showBtn.addEventListener('click', ()=>{
+            if(gallery.hidden){
+                renderGallery();
+                gallery.hidden = false;
+                showBtn.textContent = 'Ocultar portafolio';
+            } else {
+                gallery.hidden = true;
+                showBtn.textContent = 'Mostrar portafolio';
+            }
+        });
+    </script>
+</body>
+</html>
